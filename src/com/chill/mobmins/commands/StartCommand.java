@@ -56,18 +56,20 @@ public class StartCommand implements CommandExecutor {
 
                                 this.cancel();
 
+                            }else{
+
+                                List<Player> list = new ArrayList<>(Bukkit.getOnlinePlayers());
+                                for(Player p : list) {
+
+                                    EntityType[] mobs = Arrays.stream(EntityType.values())
+                                            .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
+                                            .toArray(EntityType[]::new);
+                                    EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+
+                                    World world = p.getWorld();
+                                    world.spawnEntity(p.getLocation(), randomMob);
+
                             }
-
-                            List<Player> list = new ArrayList<>(Bukkit.getOnlinePlayers());
-                            for(Player p : list) {
-
-                                EntityType[] mobs = Arrays.stream(EntityType.values())
-                                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
-                                        .toArray(EntityType[]::new);
-                                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
-
-                                World world = p.getWorld();
-                                world.spawnEntity(p.getLocation(), randomMob);
 
                             }
 
