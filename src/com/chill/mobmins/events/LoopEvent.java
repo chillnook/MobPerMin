@@ -28,19 +28,6 @@ public class LoopEvent implements Listener {
     @EventHandler
     public static void onMobSpawn(EntitySpawnEvent e) {
 
-        try {
-            while(true) {
-
-                System.out.println(new Date());
-                Thread.sleep(5 * 1000);
-
-            }
-        } catch (InterruptedException event) {
-
-            event.printStackTrace();
-
-        }
-
         FileConfiguration config = MobMins.getInstance().getConfig();
 
         if(config.getBoolean("Enabled") == false) {
@@ -50,13 +37,23 @@ public class LoopEvent implements Listener {
         }
         else{
 
-            EntityType[] mobs = Arrays.stream(EntityType.values())
-                    .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getClass()))
-                    .toArray(EntityType[]::new);
+            try {
+                while(true) {
 
-            EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+                    Thread.sleep(5 * 1000);
 
-            player.getWorld().spawnEntity(player.getLocation(), randomMob);
+                }
+            } catch (InterruptedException event) {
+
+                EntityType[] mobs = Arrays.stream(EntityType.values())
+                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getClass()))
+                        .toArray(EntityType[]::new);
+
+                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+
+                player.getWorld().spawnEntity(player.getLocation(), randomMob);
+
+            }
 
         }
 
