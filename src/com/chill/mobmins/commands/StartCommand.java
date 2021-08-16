@@ -36,23 +36,12 @@ public class StartCommand implements CommandExecutor {
 
                 config.set("Start." + ".Enabled", true);
 
-                try {
-                    while(true) {
+                EntityType[] mobs = Arrays.stream(EntityType.values())
+                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
+                        .toArray(EntityType[]::new);
+                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
 
-                        Thread.sleep(5 * 1000);
-
-                    }
-                } catch (InterruptedException event) {
-
-                    EntityType[] mobs = Arrays.stream(EntityType.values())
-                            .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getClass()))
-                            .toArray(EntityType[]::new);
-
-                    EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
-
-                    player.getWorld().spawnEntity(player.getLocation(), randomMob);
-
-                }
+                player.getWorld().spawnEntity(player.getLocation(), randomMob);
 
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning enabled.");
 
@@ -84,4 +73,5 @@ public class StartCommand implements CommandExecutor {
 
         return true;
     }
+
 }
