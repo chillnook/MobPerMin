@@ -1,6 +1,7 @@
 package com.chill.mobmins.commands;
 
 import com.chill.mobmins.MobMins;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -46,27 +47,31 @@ public class StartCommand implements CommandExecutor {
 
                 if(config.getBoolean("Start.Enabled") == true) {
 
-                    new BukkitRunnable(){
+                    for(Player p : Bukkit.getOnlinePlayers()) {
 
-                        @Override
-                        public void run() {
+                        new BukkitRunnable(){
 
-                            if(config.getBoolean("Start.Enabled") == false) {
+                            @Override
+                            public void run() {
 
-                                this.cancel();
+                                if(config.getBoolean("Start.Enabled") == false) {
+
+                                    this.cancel();
+
+                                }
+
+                                EntityType[] mobs = Arrays.stream(EntityType.values())
+                                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
+                                        .toArray(EntityType[]::new);
+                                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+
+                                player.getWorld().spawnEntity(player.getLocation(), randomMob);
 
                             }
 
-                            EntityType[] mobs = Arrays.stream(EntityType.values())
-                                    .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
-                                    .toArray(EntityType[]::new);
-                            EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+                        }.runTaskTimer(plugin, 0, 1200);
 
-                            player.getWorld().spawnEntity(player.getLocation(), randomMob);
-
-                        }
-
-                    }.runTaskTimer(plugin, 0, 1200);
+                    }
 
                 }
 
