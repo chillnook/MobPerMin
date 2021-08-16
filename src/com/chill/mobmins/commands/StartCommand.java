@@ -69,6 +69,8 @@ public class StartCommand implements CommandExecutor {
                                     World world = p.getWorld();
                                     world.spawnEntity(p.getLocation(), randomMob);
 
+
+
                             }
 
                             }
