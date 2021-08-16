@@ -71,8 +71,6 @@ public class StartCommand implements CommandExecutor {
 
                             }
 
-                            player.getWorld().spawnEntity(player.getLocation(), randomMob);
-
                         }
 
                     }.runTaskTimer(plugin, 0, 1200);
