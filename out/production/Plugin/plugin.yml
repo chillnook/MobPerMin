@@ -1,0 +1,9 @@
+name: MobMins
+version: 1.0.0
+author: Chill
+main: com.chill.mobmins.MobMins
+api-version: 1.17
+commands:
+  start:
+    description: Start the mob spawning.
+    usage: /<command>

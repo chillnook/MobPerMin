@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MobMins extends JavaPlugin {
-    FileConfiguration config = getConfig();
+    FileConfiguration config = this.getConfig();
 
     private static MobMins instance;
 
@@ -19,12 +19,12 @@ public class MobMins extends JavaPlugin {
 
         getCommand("start").setExecutor(new StartCommand());
 
+        instance = this;
+
         config.addDefault("Enabled.", false);
         config.options().copyDefaults(true);
 
         saveConfig();
-
-        instance = this;
 
         Print(ChatColor.GREEN, "[MobMins] MobMins successfully enabled.");
 
