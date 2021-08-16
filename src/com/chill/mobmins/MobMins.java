@@ -41,4 +41,5 @@ public class MobMins extends JavaPlugin {
         return message;
 
     }
+
 }

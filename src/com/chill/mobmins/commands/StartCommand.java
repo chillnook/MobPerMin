@@ -21,6 +21,8 @@ public class StartCommand implements CommandExecutor {
 
             MobMins.Print(ChatColor.YELLOW, "Try running this command again from a player.");
 
+            return true;
+
         }
 
         Player player = (Player) sender;
