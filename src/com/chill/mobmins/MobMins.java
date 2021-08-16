@@ -19,14 +19,14 @@ public class MobMins extends JavaPlugin {
 
         getCommand("start").setExecutor(new StartCommand());
 
-        instance = this;
-
-        config.addDefault("Enabled.", false);
+        config.addDefault("Start." + ".Enabled", false);
         config.options().copyDefaults(true);
 
         saveConfig();
 
         Print(ChatColor.GREEN, "[MobMins] MobMins successfully enabled.");
+
+        instance = this;
 
     }
 

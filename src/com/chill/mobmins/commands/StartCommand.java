@@ -15,11 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class StartCommand implements CommandExecutor {
-    FileConfiguration config = MobMins.getInstance().getConfig();
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        FileConfiguration config = MobMins.getInstance().getConfig();
 
         if(!(sender instanceof Player)) {
 
@@ -33,9 +32,10 @@ public class StartCommand implements CommandExecutor {
 
         if(cmd.getName().equalsIgnoreCase("start")) {
 
-            if(config.getBoolean("Enabled")) {
+            if(config.getBoolean("Start.Enabled")) {
 
-                config.set("Enabled", true);
+                config.set("Start." + ".Enabled", true);
+                player.sendMessage(ChatColor.RED + "[MobMins] Mob spawning enabled.");
 
                 //Config saving
                 try {
@@ -51,6 +51,12 @@ public class StartCommand implements CommandExecutor {
 
 
                 }
+
+            }
+            else{
+
+                config.set("Start." + ".Enabled", false);
+                player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning disabled.");
 
             }
 
