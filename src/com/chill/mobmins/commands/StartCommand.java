@@ -12,9 +12,13 @@ import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class StartCommand implements CommandExecutor {
+
+    Timer timer;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -36,12 +40,26 @@ public class StartCommand implements CommandExecutor {
 
                 config.set("Start." + ".Enabled", true);
 
-                EntityType[] mobs = Arrays.stream(EntityType.values())
-                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
-                        .toArray(EntityType[]::new);
-                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+                if(config.getBoolean("Start.Enabled") == true) {
 
-                player.getWorld().spawnEntity(player.getLocation(), randomMob);
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+
+                        @Override
+                        public void run() {
+
+                            EntityType[] mobs = Arrays.stream(EntityType.values())
+                                    .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
+                                    .toArray(EntityType[]::new);
+                            EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+
+                            player.getWorld().spawnEntity(player.getLocation(), randomMob);
+
+                        }
+
+                    }, 0, 60000);
+
+                }
 
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning enabled.");
 
@@ -56,7 +74,9 @@ public class StartCommand implements CommandExecutor {
             else{
 
                 config.set("Start." + ".Enabled", false);
+                timer.cancel();
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning disabled.");
+
 
                 try {
                     MobMins.getInstance().getConfig().save("plugins/MobMins/config.yml");
