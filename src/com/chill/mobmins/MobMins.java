@@ -1,5 +1,7 @@
 package com.chill.mobmins;
 
+import com.chill.mobmins.commands.StartCommand;
+import com.chill.mobmins.events.LoopEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,14 +15,18 @@ public class MobMins extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        getServer().getPluginManager().registerEvents(new LoopEvent(), this);
+
+        getCommand("start").setExecutor(new StartCommand());
+
         config.addDefault("Enabled.", false);
         config.options().copyDefaults(true);
 
         saveConfig();
 
-        Print(ChatColor.GREEN, "[MobMins] MobMins successfully enabled.");
-
         instance = this;
+
+        Print(ChatColor.GREEN, "[MobMins] MobMins successfully enabled.");
 
     }
 

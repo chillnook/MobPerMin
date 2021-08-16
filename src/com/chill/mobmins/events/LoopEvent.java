@@ -11,10 +11,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LoopEvent implements Listener {
@@ -30,6 +27,19 @@ public class LoopEvent implements Listener {
 
     @EventHandler
     public static void onMobSpawn(EntitySpawnEvent e) {
+
+        try {
+            while(true) {
+
+                System.out.println(new Date());
+                Thread.sleep(5 * 1000);
+
+            }
+        } catch (InterruptedException event) {
+
+            event.printStackTrace();
+
+        }
 
         FileConfiguration config = MobMins.getInstance().getConfig();
 
