@@ -1,0 +1,5 @@
+name: MobMins
+version: 1.0.0
+author: Chill
+main: com.chill.mobmins.MobMins
+api-version: 1.17
