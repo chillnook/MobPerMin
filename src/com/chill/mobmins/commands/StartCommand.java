@@ -1,18 +1,18 @@
 package com.chill.mobmins.commands;
 
 import com.chill.mobmins.MobMins;
-import com.chill.mobmins.events.LoopEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class StartCommand implements CommandExecutor {
 
@@ -35,9 +35,27 @@ public class StartCommand implements CommandExecutor {
             if(config.getBoolean("Start.Enabled") == false) {
 
                 config.set("Start." + ".Enabled", true);
+
+                try {
+                    while(true) {
+
+                        Thread.sleep(5 * 1000);
+
+                    }
+                } catch (InterruptedException event) {
+
+                    EntityType[] mobs = Arrays.stream(EntityType.values())
+                            .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getClass()))
+                            .toArray(EntityType[]::new);
+
+                    EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
+
+                    player.getWorld().spawnEntity(player.getLocation(), randomMob);
+
+                }
+
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning enabled.");
 
-                //Config saving
                 try {
                     MobMins.getInstance().getConfig().save("plugins/MobMins/config.yml");
                 } catch (IOException e) {
@@ -45,18 +63,20 @@ public class StartCommand implements CommandExecutor {
                     MobMins.Print(ChatColor.RED, "Could not save config! Report this to the developer.");
                 }
 
-                //Enable mob event
-                for(Player p : Bukkit.getOnlinePlayers()) {
-
-
-
-                }
-
             }
             else{
 
                 config.set("Start." + ".Enabled", false);
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning disabled.");
+
+                try {
+                    MobMins.getInstance().getConfig().save("plugins/MobMins/config.yml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    MobMins.Print(ChatColor.RED, "Could not save config! Report this to the developer.");
+                }
+
+                return true;
 
             }
 
