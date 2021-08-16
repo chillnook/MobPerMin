@@ -30,7 +30,7 @@ public class MobMins extends JavaPlugin {
 
         instance = this;
 
-        if(config.getBoolean("Start.Enabled")) {
+        if(config.getBoolean("Start.Enabled") == false) {
 
 
 
