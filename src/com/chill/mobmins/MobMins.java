@@ -30,6 +30,18 @@ public class MobMins extends JavaPlugin {
 
         instance = this;
 
+        if(config.getBoolean("Start.Enabled")) {
+
+
+
+        }else{
+
+            Print(ChatColor.GREEN, "[MobMins] Mob Spawning was left enabled. Disabling.");
+            config.set("Start." + ".Enabled", false);
+            saveConfig();
+
+        }
+
     }
 
     @Override
