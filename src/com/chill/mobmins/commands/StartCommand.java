@@ -3,6 +3,7 @@ package com.chill.mobmins.commands;
 import com.chill.mobmins.MobMins;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,9 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class StartCommand implements CommandExecutor {
@@ -47,31 +46,36 @@ public class StartCommand implements CommandExecutor {
 
                 if(config.getBoolean("Start.Enabled") == true) {
 
-                    for(Player p : Bukkit.getOnlinePlayers()) {
 
-                        new BukkitRunnable(){
+                    new BukkitRunnable(){
 
-                            @Override
-                            public void run() {
+                        @Override
+                        public void run() {
 
-                                if(config.getBoolean("Start.Enabled") == false) {
+                            if(config.getBoolean("Start.Enabled") == false) {
 
-                                    this.cancel();
-
-                                }
-
-                                EntityType[] mobs = Arrays.stream(EntityType.values())
-                                        .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
-                                        .toArray(EntityType[]::new);
-                                EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
-
-                                player.getWorld().spawnEntity(player.getLocation(), randomMob);
+                                this.cancel();
 
                             }
 
-                        }.runTaskTimer(plugin, 0, 1200);
+                            EntityType[] mobs = Arrays.stream(EntityType.values())
+                                    .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
+                                    .toArray(EntityType[]::new);
+                            EntityType randomMob = mobs[ThreadLocalRandom.current().nextInt(mobs.length)];
 
-                    }
+                            List<Player> list = new ArrayList<>(Bukkit.getOnlinePlayers());
+                            for(Player p : list) {
+
+                                World world = p.getWorld();
+                                world.spawnEntity(p.getLocation(), randomMob);
+
+                            }
+
+                            player.getWorld().spawnEntity(player.getLocation(), randomMob);
+
+                        }
+
+                    }.runTaskTimer(plugin, 0, 1200);
 
                 }
 
