@@ -35,7 +35,7 @@ public class StartCommand implements CommandExecutor {
             if(config.getBoolean("Start.Enabled") == false) {
 
                 config.set("Start." + ".Enabled", true);
-                player.sendMessage(ChatColor.RED + "[MobMins] Mob spawning enabled.");
+                player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning enabled.");
 
                 //Config saving
                 try {
