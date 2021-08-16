@@ -9,6 +9,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class StartCommand implements CommandExecutor {
 
-    Timer timer;
+    static Timer timer;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -36,17 +38,24 @@ public class StartCommand implements CommandExecutor {
 
         if(cmd.getName().equalsIgnoreCase("start")) {
 
+            Plugin plugin = MobMins.getPlugin(MobMins.class);
+
             if(config.getBoolean("Start.Enabled") == false) {
 
                 config.set("Start." + ".Enabled", true);
 
                 if(config.getBoolean("Start.Enabled") == true) {
 
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
+                    new BukkitRunnable(){
 
                         @Override
                         public void run() {
+
+                            if(config.getBoolean("Start.Enabled") == false) {
+
+                                this.cancel();
+
+                            }
 
                             EntityType[] mobs = Arrays.stream(EntityType.values())
                                     .filter(type -> type.getEntityClass() != null && Mob.class.isAssignableFrom(type.getEntityClass()))
@@ -57,7 +66,7 @@ public class StartCommand implements CommandExecutor {
 
                         }
 
-                    }, 0, 60000);
+                    }.runTaskTimer(plugin, 0, 1200);
 
                 }
 
@@ -74,7 +83,6 @@ public class StartCommand implements CommandExecutor {
             else{
 
                 config.set("Start." + ".Enabled", false);
-                timer.cancel();
                 player.sendMessage(ChatColor.GREEN + "[MobMins] Mob spawning disabled.");
 
 
